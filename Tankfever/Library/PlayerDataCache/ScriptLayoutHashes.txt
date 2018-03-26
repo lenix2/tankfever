@@ -1,6 +1,6 @@
 WindowsStandalone
 PlayerPath?
-C:/Users/Steve/Desktop/Tankfever_Unity/TankFever2_0.1/tf.exe
+C:/Users/Steve/Desktop/TankFever/unity/TankFever2_v0.2/TankFever.exe
 SceneListBegin?
 Assets/scene.unity
 SceneListEnd?
@@ -94,7 +94,7 @@ ff05dcdf90651c3d98a9cad3df5e471e UnityEngine.Timeline.dll:UnityEngine.Timeline.C
 31aaf521b3ef8699466676591ea0efd4 UnityEngine.Timeline.dll:UnityEngine.Timeline.GroupTrack
 31aaf521b3ef8699466676591ea0efd4 UnityEngine.Timeline.dll:UnityEngine.Timeline.PlayableTrack
 df374c01140c2d578bf70cbd60073d1d UnityEngine.Timeline.dll:UnityEngine.Timeline.TimelineAsset
-5b6d2f4f17be40d503a62c92e43cb271 Assembly-CSharp.dll:.TankShooting
+9d94b3bf12a1d7c32e6fed517a1ff10c Assembly-CSharp.dll:.TankShooting
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour
 60b2bb652410a5867a5ab9a01cd38461 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkDiscovery
@@ -119,7 +119,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 da853bfdf735c98a8aedf041f4a62a27 Assembly-CSharp.dll:.DmgCollision
 6617ae939081babfa42a458ec3ab9352 Assembly-CSharp.dll:.EnvExplosion
-edbd2c4ce968fa646d74cb9ff4aacc10 Assembly-CSharp.dll:.GameManager
+1ae42bd311e5fa931fa413c67888b328 Assembly-CSharp.dll:.GameManager
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
@@ -158,3 +158,4 @@ f671a42aea5f34fec6a4450a3668c615 Assembly-CSharp.dll:UnityEngine.PostProcessing.
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 4b586b4bb37722fabcd455430876d1fe Assembly-CSharp.dll:.TankHealth
 ba8d22a92b2908a97be4b61c83e8deb8 Assembly-CSharp.dll:.ShellExplosion
+87cc946fe95e9eff8a48aca4ef5bceb0 Assembly-CSharp.dll:.ItemCollsisionNoTrigger

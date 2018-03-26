@@ -16,7 +16,7 @@ public class TankHealth : MonoBehaviour
 	private ParticleSystem m_ExplosionParticles;        // The particle system the will play when the tank is destroyed.
 	private float m_CurrentHealth;                      // How much health the tank currently has.
 	private bool m_Dead;                                // Has the tank been reduced beyond zero health yet?
-
+	private Rigidbody m_BurstedInstance;
 
 	private void Awake ()
 	{
@@ -67,6 +67,12 @@ public class TankHealth : MonoBehaviour
 		m_FillImage.color = Color.Lerp (m_ZeroHealthColor, m_FullHealthColor, m_CurrentHealth / m_StartingHealth);
 	}
 
+	public void destroyDeadTank() {
+		if (m_BurstedInstance != null) {
+			m_BurstedInstance.position = new Vector3 (-10000f, -10000f, -10000f);
+		}
+
+	}
 
 	private void OnDeath ()
 	{
@@ -80,6 +86,8 @@ public class TankHealth : MonoBehaviour
 		Rigidbody burstedInstance =
 			Instantiate (m_Bursted, this.transform.position, this.transform.rotation) as Rigidbody;
 		burstedInstance.velocity = this.transform.forward;
+
+		m_BurstedInstance = burstedInstance;
 
 		// Play the particle system of the tank exploding.
 		m_ExplosionParticles.Play ();

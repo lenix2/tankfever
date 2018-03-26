@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -19,14 +21,15 @@ public class TankManager
 
 	private TankMovement m_Movement;                        // Reference to tank's movement script, used to disable and enable control.
 	private TankShooting m_Shooting;                        // Reference to tank's shooting script, used to disable and enable control.
+	private TankHealth m_Health; 
 	private GameObject m_CanvasGameObject;                  // Used to disable the world space UI during the Starting and Ending phases of each round.
-
 
 	public void Setup ()
 	{
 		// Get references to the components.
 		m_Movement = m_Instance.GetComponent<TankMovement> ();
 		m_Shooting = m_Instance.GetComponent<TankShooting> ();
+		m_Health = m_Instance.GetComponent<TankHealth> ();
 		m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas> ().gameObject;
 
 		// Set the player numbers to be consistent across the scripts.
@@ -67,12 +70,13 @@ public class TankManager
 		m_CanvasGameObject.SetActive (true);
 	}
 
-
 	// Used at the start of each round to put the tank into it's default state.
 	public void Reset ()
 	{
 		m_Instance.transform.position = m_SpawnPoint.position;
 		m_Instance.transform.rotation = m_SpawnPoint.rotation;
+
+		m_Health.destroyDeadTank ();
 
 		m_Instance.SetActive (false);
 		m_Instance.SetActive (true);

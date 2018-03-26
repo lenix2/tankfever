@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
 	public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
 	public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
 	public GameObject m_Levelart;
+	public GameObject m_ItemPrefab;
 
 
 	private int m_RoundNumber;                  // Which round the game is currently on.
@@ -18,7 +20,10 @@ public class GameManager : MonoBehaviour
 	private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
 	private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
 	private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
+	private List<GameObject> m_ItemPrefabList;
 
+	private float m_TimeSinceDrop;
+	private bool m_isIngame;
 
 	private void Start()
 	{
@@ -27,11 +32,26 @@ public class GameManager : MonoBehaviour
 		m_EndWait = new WaitForSeconds (m_EndDelay);
 
 		SpawnAllTanks();
-
+		m_ItemPrefabList = new List<GameObject>();
+		m_TimeSinceDrop = 0f;
+		m_isIngame = false;
 		// Once the tanks have been created and the camera is using them as targets, start the game.
 		StartCoroutine (GameLoop ());
 	}
 
+	private void Update(){
+		m_TimeSinceDrop = m_TimeSinceDrop + Time.deltaTime;
+
+		if (m_TimeSinceDrop >= 0.3f && m_isIngame) {
+			m_TimeSinceDrop = 0f;
+
+			if (Random.Range(0f, 100f) < 20f) {
+				GameObject itemInstance = Instantiate (m_ItemPrefab, new Vector3(Random.Range(-40f, 40f), 5f, Random.Range(-40f, 40f)), m_Levelart.transform.rotation) as GameObject;
+
+				m_ItemPrefabList.Add(itemInstance);
+			}
+		}
+	}
 
 	private void SpawnAllTanks()
 	{
@@ -83,7 +103,7 @@ public class GameManager : MonoBehaviour
 		// Increment the round number and display text showing the players what round it is.
 		m_RoundNumber++;
 		m_MessageText.text = "ROUND " + m_RoundNumber;
-
+		m_isIngame = true;
 		// Wait for the specified length of time until yielding control back to the game loop.
 		yield return m_StartWait;
 	}
@@ -105,9 +125,21 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	private void RemoveLootcrates() {
+		foreach (GameObject loot in m_ItemPrefabList) {
+			if (loot != null) {
+				loot.transform.position = new Vector3 (-10000f, -10000f, -10000f);
+			}
+		}
+
+		m_ItemPrefabList.Clear();
+	}
 
 	private IEnumerator RoundEnding ()
 	{
+		m_isIngame = false;
+		RemoveLootcrates ();
+
 		// Stop tanks from moving.
 		DisableTankControl ();
 
