@@ -1,6 +1,6 @@
 WebGL
 PlayerPath?
-C:/Users/Steve/Desktop/TankFever/unity/TankFever2_v0.3_WebGL
+C:/Users/Steve/Desktop/TankFever/unity/TankFever2_v0.4_WebGL
 SceneListBegin?
 Assets/scene.unity
 SceneListEnd?

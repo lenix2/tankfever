@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
+		string message = "\n\n\nTankFever\n\n\n\n Start - SPACE\n Mute - M\n \n";
+
+		m_MessageText.text = message;
+
 		m_Started = false;
 		m_isPaused = false;
 		if (AudioListener.volume > 0.3f) {
@@ -118,7 +122,7 @@ public class GameManager : MonoBehaviour
 		DisableTankControl ();
 
 		// Get a message based on the scores and whether or not there is a game winner and display it.
-		string message = "TIMEOUT!\n Resume - SPACE\n Quit - ESC \n \n";
+		string message = "TIMEOUT!\n Resume - SPACE\n \n";
 
 		// Go through all the tanks and add each of their scores to the message.
 		for (int i = 0; i < m_Tanks.Length; i++)
