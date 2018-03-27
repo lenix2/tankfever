@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 	public GameObject m_ItemPrefab;
 
 
+
 	private int m_RoundNumber;                  // Which round the game is currently on.
 	private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
 	private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
@@ -24,10 +25,21 @@ public class GameManager : MonoBehaviour
 
 	private float m_TimeSinceDrop;
 	private bool m_isIngame;
+	private bool m_isPaused;
+	private bool m_Started;
 
 	private void Start()
 	{
+		m_Started = false;
+		m_isPaused = false;
+		if (AudioListener.volume > 0.3f) {
+			AudioListener.volume = 0.3f;
+		}
+	}
+
+	private void StartGame() {
 		// Create the delays so they only have to be made once.
+		m_Started = true;
 		m_StartWait = new WaitForSeconds (m_StartDelay);
 		m_EndWait = new WaitForSeconds (m_EndDelay);
 
@@ -51,6 +63,77 @@ public class GameManager : MonoBehaviour
 				m_ItemPrefabList.Add(itemInstance);
 			}
 		}
+
+		if (Input.GetKeyDown ("m")) {
+			Mute ();
+		}
+
+		if (Input.GetKeyDown ("space")) {
+			if (!m_Started) {
+				StartGame ();
+			} else {
+				if (m_isPaused) {
+					Resume ();
+				} else {
+					if (m_isIngame) {
+						Pause ();
+					}
+				}
+			}
+		}
+
+		if (Input.GetKeyDown ("escape")) {
+			if (!m_Started) {
+				Application.Quit();
+			} else {
+				if (m_isPaused) {
+					Application.Quit();
+				} else {
+					if (m_isIngame) {
+						Pause ();
+					}
+				}
+			}
+		}
+
+	}
+
+	private void Mute() {
+		if (AudioListener.pause) {
+			AudioListener.volume = 0.3f;
+			AudioListener.pause = false;
+		} else {
+			AudioListener.volume = 0f;
+			AudioListener.pause = true;
+		}
+
+	}
+
+	private void Pause() {
+		m_isIngame = false;
+		m_isPaused = true;
+		Time.timeScale=0;
+
+		// Stop tanks from moving.
+		DisableTankControl ();
+
+		// Get a message based on the scores and whether or not there is a game winner and display it.
+		string message = "TIMEOUT!\n Resume - SPACE\n Quit - ESC \n \n";
+
+		// Go through all the tanks and add each of their scores to the message.
+		for (int i = 0; i < m_Tanks.Length; i++)
+		{
+			message += m_Tanks[i].m_ColoredPlayerText + ": " + m_Tanks[i].m_Wins + " WINS\n";
+		}
+		m_MessageText.text = message;
+	}
+
+	private void Resume() {
+		m_isIngame = true;
+		m_isPaused = false;
+		Time.timeScale=1;
+		EnableTankControl ();
+		m_MessageText.text = string.Empty;
 	}
 
 	private void SpawnAllTanks()
@@ -103,7 +186,7 @@ public class GameManager : MonoBehaviour
 		// Increment the round number and display text showing the players what round it is.
 		m_RoundNumber++;
 		m_MessageText.text = "ROUND " + m_RoundNumber;
-		m_isIngame = true;
+
 		// Wait for the specified length of time until yielding control back to the game loop.
 		yield return m_StartWait;
 	}
@@ -111,6 +194,7 @@ public class GameManager : MonoBehaviour
 
 	private IEnumerator RoundPlaying ()
 	{
+		m_isIngame = true;
 		// As soon as the round begins playing let the players control the tanks.
 		EnableTankControl ();
 
