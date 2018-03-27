@@ -11,7 +11,7 @@ public class TankShooting : MonoBehaviour
 	public Transform m_FireTransform3; 
     public AudioSource m_ShootingAudio;    
     public AudioClip m_FireClip;         
-    public float m_LaunchForce = 15f; 
+    public float m_LaunchForce = 30f; 
 	public Slider m_Slider;                            
 	public Image m_FillImage; 
 
@@ -105,8 +105,28 @@ public class TankShooting : MonoBehaviour
 
 			// Set the shell's velocity to the launch force in the fire position's forward direction.
 			shellInstance3.velocity = m_LaunchForce * m_FireTransform3.forward;
+
+			if (m_itemList.IndexOf (3) > -1) {
+				ShellExplosion m_shell2 = shellInstance2.GetComponent<ShellExplosion> ();
+				m_shell2.m_IsSuper = true;
+				ShellExplosion m_shell3 = shellInstance3.GetComponent<ShellExplosion> ();
+				m_shell3.m_IsSuper = true;
+			}
+			if (m_itemList.IndexOf (4) > -1) {
+				ShellExplosion m_shell2 = shellInstance2.GetComponent<ShellExplosion> ();
+				m_shell2.m_IsCluster = true;
+				ShellExplosion m_shell3 = shellInstance3.GetComponent<ShellExplosion> ();
+				m_shell3.m_IsCluster = true;
+			}
 		}
 
-
+		if (m_itemList.IndexOf (3) > -1) {
+			ShellExplosion m_shell = shellInstance.GetComponent<ShellExplosion> ();
+			m_shell.m_IsSuper = true;
+		}
+		if (m_itemList.IndexOf (4) > -1) {
+			ShellExplosion m_shell = shellInstance.GetComponent<ShellExplosion> ();
+			m_shell.m_IsCluster = true;
+		}
     }
 }

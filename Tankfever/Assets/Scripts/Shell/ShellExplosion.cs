@@ -9,13 +9,36 @@ public class ShellExplosion : MonoBehaviour
 	public float m_ExplosionForce = 1000f;              // The amount of force added to a tank at the centre of the explosion.
 	public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
 	public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
-	private float m_TimeSinceShot;
+	private float m_TimeSinceShot;  
+
+
+	public bool m_IsCluster = false;
+	public bool m_IsSuper = false;
+	public Transform[] m_Transforms;
+	public Rigidbody m_Shell; 
 
 	private void Start ()
 	{
 		// If it isn't destroyed by then, destroy the shell after it's lifetime.
 		Destroy (gameObject, m_MaxLifeTime);
 		m_TimeSinceShot = 0f;
+
+		if (m_IsSuper) {
+			MeshRenderer[] renderers = this.gameObject.GetComponentsInChildren<MeshRenderer> ();
+
+			// Go through all the renderers...
+			for (int i = 0; i < renderers.Length; i++)
+			{
+				// ... set their material color to the color specific to this tank.
+				renderers[i].material.color = new Color(1f, 1f, 0f, 1f);
+			}
+		}
+
+		if (m_IsCluster) {
+			this.transform.localScale = new Vector3 (3f, 3f, 2f);
+		} else {
+			this.transform.localScale = new Vector3 (1.5f, 1.5f, 1.5f);
+		}
 	}
 
 	private void Update()
@@ -26,7 +49,7 @@ public class ShellExplosion : MonoBehaviour
 
 	private void OnTriggerEnter (Collider other)
 	{
-		if (m_TimeSinceShot > 0.5f) {
+		if (m_TimeSinceShot > 0.01f) {
 			
 			// Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
 			Collider[] colliders = Physics.OverlapSphere (transform.position, m_ExplosionRadius, m_TankMask);
@@ -58,17 +81,24 @@ public class ShellExplosion : MonoBehaviour
 			}
 
 			// Unparent the particles from the shell.
-			m_ExplosionParticles.transform.parent = null;
+			if (m_ExplosionParticles != null) {
+				m_ExplosionParticles.transform.parent = null;
 
-			// Play the particle system.
-			m_ExplosionParticles.Play ();
+				// Play the particle system.
+				m_ExplosionParticles.Play ();
 
-			// Play the explosion sound effect.
-			m_ExplosionAudio.Play ();
+				// Play the explosion sound effect.
+				m_ExplosionAudio.Play ();
 
-			// Once the particles have finished, destroy the gameobject they are on.
-			ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
-			Destroy (m_ExplosionParticles.gameObject, mainModule.duration);
+				// Once the particles have finished, destroy the gameobject they are on.
+				ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
+				Destroy (m_ExplosionParticles.gameObject, mainModule.duration);
+			}
+
+
+			if (m_IsCluster) {
+				Cluster ();
+			}
 
 			// Destroy the shell.
 			Destroy (gameObject);
@@ -76,6 +106,24 @@ public class ShellExplosion : MonoBehaviour
 		}
 	}
 
+	private void Cluster() {
+		for (int i = 0; i < m_Transforms.Length; i++)
+		{
+			// ... set their material color to the color specific to this tank.
+			Rigidbody shellInstance =
+				Instantiate (m_Shell, m_Transforms[i].position, m_Transforms[i].rotation) as Rigidbody;
+
+			// Set the shell's velocity to the launch force in the fire position's forward direction.
+			shellInstance.velocity = 30f * m_Transforms[i].forward; 
+
+			ShellExplosion m_shell = shellInstance.GetComponent<ShellExplosion> ();
+			m_shell.m_IsCluster = false;
+
+			if (m_IsSuper) {
+				m_shell.m_IsSuper = true;
+			}
+		}
+	}
 
 	private float CalculateDamage (Vector3 targetPosition)
 	{
@@ -90,6 +138,10 @@ public class ShellExplosion : MonoBehaviour
 
 		// Calculate damage as this proportion of the maximum possible damage.
 		float damage = relativeDistance * m_MaxDamage;
+
+		if (m_IsSuper) {
+			damage = damage * 3;
+		}
 
 		// Make sure that the minimum damage is always 0.
 		damage = Mathf.Max (0f, damage);
