@@ -46,7 +46,6 @@ public class ItemCollsisionNoTrigger : MonoBehaviour
 
 	void OnCollisionEnter(Collision other)
 	{
-
 		if (other.gameObject.layer == 9) {
 			
 			// ... and find their rigidbody.
@@ -62,11 +61,10 @@ public class ItemCollsisionNoTrigger : MonoBehaviour
 			m_ExplosionParticles.transform.parent = null;
 
 			// Play the particle system.
-			m_ExplosionParticles.Play();
+			m_ExplosionParticles.Play ();
 			ParticleSystem.MainModule mainModule = m_ExplosionParticles.main;
 			Destroy (m_ExplosionParticles.gameObject, mainModule.duration);
 
-			// Deal this damage to the tank.
 			tankShooting.AddItem (m_ItemType);
 			Destroy (gameObject);
 		}

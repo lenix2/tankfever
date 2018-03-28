@@ -35,9 +35,9 @@ public class ShellExplosion : MonoBehaviour
 		}
 
 		if (m_IsCluster) {
-			this.transform.localScale = new Vector3 (3f, 3f, 2f);
+			this.transform.localScale = new Vector3 (5f, 5f, 4f);
 		} else {
-			this.transform.localScale = new Vector3 (1.5f, 1.5f, 1.5f);
+			this.transform.localScale = new Vector3 (3f, 3f, 3f);
 		}
 	}
 
@@ -98,6 +98,10 @@ public class ShellExplosion : MonoBehaviour
 
 			if (m_IsCluster) {
 				Cluster ();
+			}
+
+			if (other.gameObject.layer == 10) {
+				Destroy (other.gameObject);
 			}
 
 			// Destroy the shell.

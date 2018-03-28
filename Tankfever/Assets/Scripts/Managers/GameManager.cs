@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
+		Application.targetFrameRate = 60;
 		string message = "\n\n\nTankFever\n\n\n\n Start - SPACE\n Mute - M\n \n";
 
 		m_MessageText.text = message;
