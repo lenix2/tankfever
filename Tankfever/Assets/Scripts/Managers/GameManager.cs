@@ -10,9 +10,14 @@ public class GameManager : MonoBehaviour
 	public float m_EndDelay = 3f;               // The delay between the end of RoundPlaying and RoundEnding phases.
 	public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
 	public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
-	public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
 	public GameObject m_Levelart;
 	public GameObject m_ItemPrefab;
+	public Dropdown dropdown;
+	public TankManager m_Tank1;
+	public TankManager m_Tank2;
+	public TankManager m_Tank3;
+	public TankManager m_Tank4;
+
 
 
 
@@ -28,6 +33,8 @@ public class GameManager : MonoBehaviour
 	private bool m_isPaused;
 	private bool m_Started;
 
+	public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
+
 	private void Start()
 	{
 		Application.targetFrameRate = 60;
@@ -39,6 +46,27 @@ public class GameManager : MonoBehaviour
 		m_isPaused = false;
 		if (AudioListener.volume > 0.3f) {
 			AudioListener.volume = 0.3f;
+		}
+		m_Tanks = new TankManager[2];
+		m_Tanks [0] = m_Tank1;
+		m_Tanks [1] = m_Tank2;
+	}
+
+	public void SetPlayerCount() {
+	}
+
+	private void PreStartGame() {
+		if (dropdown.value == 1) {
+			m_Tanks = new TankManager[3];
+			m_Tanks [0] = m_Tank1;
+			m_Tanks [1] = m_Tank2;
+			m_Tanks [2] = m_Tank3;
+		} else if (dropdown.value == 2) {
+			m_Tanks = new TankManager[4];
+			m_Tanks [0] = m_Tank1;
+			m_Tanks [1] = m_Tank2;
+			m_Tanks [2] = m_Tank3;
+			m_Tanks [3] = m_Tank4;
 		}
 	}
 
@@ -52,6 +80,7 @@ public class GameManager : MonoBehaviour
 		m_ItemPrefabList = new List<GameObject>();
 		m_TimeSinceDrop = 0f;
 		m_isIngame = false;
+		dropdown.transform.localScale = new Vector3 (0f, 0f, 0f);
 		// Once the tanks have been created and the camera is using them as targets, start the game.
 		StartCoroutine (GameLoop ());
 	}
@@ -75,6 +104,7 @@ public class GameManager : MonoBehaviour
 
 		if (Input.GetKeyDown ("space")) {
 			if (!m_Started) {
+				PreStartGame ();
 				StartGame ();
 			} else {
 				if (m_isPaused) {

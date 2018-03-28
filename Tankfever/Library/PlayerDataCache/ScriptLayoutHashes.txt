@@ -1,6 +1,6 @@
 WebGL
 PlayerPath?
-C:/Users/Lenny/Desktop/TankFever_Unity/TankFever2_v.05_WebGL
+C:/Users/Steve/Desktop/TankFever/unity/TankFever2_v0.6_WebGL
 SceneListBegin?
 Assets/scene.unity
 SceneListEnd?
@@ -121,7 +121,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 da853bfdf735c98a8aedf041f4a62a27 Assembly-CSharp.dll:.DmgCollision
 6617ae939081babfa42a458ec3ab9352 Assembly-CSharp.dll:.EnvExplosion
 2202590b6fee74106daee3b5bd44cd0c Assembly-CSharp.dll:.PushCollisionNoTrigger
-1ae42bd311e5fa931fa413c67888b328 Assembly-CSharp.dll:.GameManager
+5ab3c36cdd13cc8d92cfd12511cc62fd Assembly-CSharp.dll:.GameManager
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.FPSDisplay
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
