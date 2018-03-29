@@ -85,7 +85,7 @@ public class TankHealth : MonoBehaviour
 
 		Rigidbody burstedInstance =
 			Instantiate (m_Bursted, this.transform.position, this.transform.rotation) as Rigidbody;
-		burstedInstance.velocity = this.transform.forward;
+		burstedInstance.velocity = this.transform.forward * 5f;
 
 		m_BurstedInstance = burstedInstance;
 

@@ -20,14 +20,12 @@ public class TankShooting : MonoBehaviour
 	private int m_ammo;
 	private List<int> m_itemList;
 	float m_TimeSinceLastShot;
+	private bool m_enabled = false;
 
 
-    private void OnEnable()
-    {
-		m_ammo = 5;
-		m_Slider.value = m_ammo;
-		m_itemList = new List<int>();
-    }
+	public void SetEnabled(bool b) {
+		m_enabled = b;
+	}
 
 
     private void Start()
@@ -39,18 +37,25 @@ public class TankShooting : MonoBehaviour
 		m_Slider.value = m_ammo;
     }
 
+	public void Reset() {
+		m_ammo = 5;
+		m_Slider.value = m_ammo;
+		m_itemList = new List<int>();
+	}
+
     private void Update()
     {
-		m_TimeSinceLastShot = m_TimeSinceLastShot + Time.deltaTime;
+		if (m_enabled) {
+			m_TimeSinceLastShot = m_TimeSinceLastShot + Time.deltaTime;
 
-        // Track the current state of the fire button and make decisions based on the current launch force.
-		if (Input.GetButtonUp (m_FireButton))
-		{
-			// ... launch the shell.
-			if (m_TimeSinceLastShot >= 0.5f && m_ammo > 0) {
-				Fire ();
-				// Set the slider's value appropriately.
-				m_Slider.value = m_ammo;
+			// Track the current state of the fire button and make decisions based on the current launch force.
+			if (Input.GetButtonUp (m_FireButton)) {
+				// ... launch the shell.
+				if (m_TimeSinceLastShot >= 0.5f && m_ammo > 0) {
+					Fire ();
+					// Set the slider's value appropriately.
+					m_Slider.value = m_ammo;
+				}
 			}
 		}
     }

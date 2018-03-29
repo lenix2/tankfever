@@ -54,20 +54,15 @@ public class TankManager
 	// Used during the phases of the game where the player shouldn't be able to control their tank.
 	public void DisableControl ()
 	{
-		m_Movement.enabled = false;
-		m_Shooting.enabled = false;
-
-		m_CanvasGameObject.SetActive (false);
+		m_Movement.SetEnabled (false);
+		m_Shooting.SetEnabled (false);
 	}
-
 
 	// Used during the phases of the game where the player should be able to control their tank.
 	public void EnableControl ()
-	{
-		m_Movement.enabled = true;
-		m_Shooting.enabled = true;
-
-		m_CanvasGameObject.SetActive (true);
+	{		
+		m_Movement.SetEnabled (true);
+		m_Shooting.SetEnabled (true);
 	}
 
 	// Used at the start of each round to put the tank into it's default state.
@@ -75,6 +70,7 @@ public class TankManager
 	{
 		m_Instance.transform.position = m_SpawnPoint.position;
 		m_Instance.transform.rotation = m_SpawnPoint.rotation;
+		m_Shooting.Reset ();
 
 		m_Health.destroyDeadTank ();
 

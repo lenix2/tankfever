@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PushCollisionNoTrigger : MonoBehaviour 
 {
-	public float m_ExplosionForce = 2000f;
-	public float m_ExplosionRadius =10f;
+	public float m_ExplosionForce = 100f;
+	public float m_ExplosionRadius =20f;
 
 	void OnCollisionEnter(Collision other)
 	{

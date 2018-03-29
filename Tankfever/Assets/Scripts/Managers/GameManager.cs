@@ -12,11 +12,16 @@ public class GameManager : MonoBehaviour
 	public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
 	public GameObject m_Levelart;
 	public GameObject m_ItemPrefab;
-	public Dropdown dropdown;
 	public TankManager m_Tank1;
 	public TankManager m_Tank2;
 	public TankManager m_Tank3;
 	public TankManager m_Tank4;
+	public MenuManagerTank m_Tank1m;
+	public MenuManagerTank m_Tank2m;
+	public MenuManagerTank m_Tank3m;
+	public MenuManagerTank m_Tank4m;
+	public Canvas m_MainMenu;
+
 
 
 
@@ -38,7 +43,7 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		Application.targetFrameRate = 60;
-		string message = "\n\n\nTankFever\n\n\n\n Start - SPACE\n Mute - M\n \n";
+		string message = "";
 
 		m_MessageText.text = message;
 
@@ -50,24 +55,87 @@ public class GameManager : MonoBehaviour
 		m_Tanks = new TankManager[2];
 		m_Tanks [0] = m_Tank1;
 		m_Tanks [1] = m_Tank2;
+		m_Tank1m.Title.text = "Player1";
+		m_Tank2m.Title.text = "Player2";
+		m_Tank3m.Title.text = "Player3";
+		m_Tank4m.Title.text = "Player4";
+
+		m_Tank1m.Controll_Disable.text = "Disable";
+		m_Tank2m.Controll_Disable.text = "Disable";
+		m_Tank3m.Controll_Disable.text = "Enable";
+		m_Tank4m.Controll_Disable.text = "Enable";
+
+		m_Tank1m.Controll_Left.text = "A";
+		m_Tank1m.Controll_Right.text = "D";
+		m_Tank1m.Controll_Fire.text = "W";
+
+		m_Tank2m.Controll_Left.text = "<";
+		m_Tank2m.Controll_Right.text = ">";
+		m_Tank2m.Controll_Fire.text = "^";
+
+		m_Tank3m.Controll_Left.text = "J";
+		m_Tank3m.Controll_Right.text = "L";
+		m_Tank3m.Controll_Fire.text = "I";
+
+		m_Tank4m.Controll_Left.text = "V";
+		m_Tank4m.Controll_Right.text = "B";
+		m_Tank4m.Controll_Fire.text = "G";
+
+		m_Tank1m.Disable.enabled = true;
+		m_Tank2m.Disable.enabled = true;
+		m_Tank3m.Disable.enabled = true;
+		m_Tank4m.Disable.enabled = false;
 	}
 
-	public void SetPlayerCount() {
+	public void EnablePlayer1() {
+		// Nothing
 	}
 
-	private void PreStartGame() {
-		if (dropdown.value == 1) {
+	public void EnablePlayer2() {
+		// Nothing
+	}
+
+	public void EnablePlayer3() {
+		if (m_Tank3m.Controll_Disable.text == "Enable") {
+			if (m_Tank2m.Controll_Disable.text == "Disable") {
+				m_Tank3m.Controll_Disable.text = "Disable";
+				m_Tank4m.Disable.enabled = true;
+			}
+		} else {
+			m_Tank3m.Controll_Disable.text = "Enable";
+			m_Tank4m.Controll_Disable.text = "Enable";
+			m_Tank4m.Disable.enabled = false;
+		}
+	}
+
+	public void EnablePlayer4() {
+		if (m_Tank4m.Controll_Disable.text == "Enable") {
+			if (m_Tank3m.Controll_Disable.text == "Disable") {
+				m_Tank4m.Controll_Disable.text = "Disable";
+			}
+		} else {
+			m_Tank4m.Controll_Disable.text = "Enable";
+		}
+	}
+
+	public void PreStartGame() {
+		if (m_Tank3m.Controll_Disable.text == "Disable") {
 			m_Tanks = new TankManager[3];
 			m_Tanks [0] = m_Tank1;
 			m_Tanks [1] = m_Tank2;
 			m_Tanks [2] = m_Tank3;
-		} else if (dropdown.value == 2) {
-			m_Tanks = new TankManager[4];
-			m_Tanks [0] = m_Tank1;
-			m_Tanks [1] = m_Tank2;
-			m_Tanks [2] = m_Tank3;
-			m_Tanks [3] = m_Tank4;
+			if (m_Tank4m.Controll_Disable.text == "Disable") {
+				m_Tanks = new TankManager[4];
+				m_Tanks [0] = m_Tank1;
+				m_Tanks [1] = m_Tank2;
+				m_Tanks [2] = m_Tank3;
+				m_Tanks [3] = m_Tank4;
+			}
 		}
+
+		m_MainMenu.enabled = false;
+
+		StartGame ();
 	}
 
 	private void StartGame() {
@@ -80,7 +148,6 @@ public class GameManager : MonoBehaviour
 		m_ItemPrefabList = new List<GameObject>();
 		m_TimeSinceDrop = 0f;
 		m_isIngame = false;
-		dropdown.transform.localScale = new Vector3 (0f, 0f, 0f);
 		// Once the tanks have been created and the camera is using them as targets, start the game.
 		StartCoroutine (GameLoop ());
 	}
@@ -105,7 +172,6 @@ public class GameManager : MonoBehaviour
 		if (Input.GetKeyDown ("space")) {
 			if (!m_Started) {
 				PreStartGame ();
-				StartGame ();
 			} else {
 				if (m_isPaused) {
 					Resume ();
@@ -150,7 +216,7 @@ public class GameManager : MonoBehaviour
 		Time.timeScale=0;
 
 		// Stop tanks from moving.
-		DisableTankControl ();
+		// DisableTankControl ();
 
 		// Get a message based on the scores and whether or not there is a game winner and display it.
 		string message = "TIMEOUT!\n Resume - SPACE\n \n";
